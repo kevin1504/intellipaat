@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function init(){
+            document.getElementsByTagName("h1")[0].textContent = "Changed";
+        };
+        // document.body.onload = init;
+        // document.onload = init;
+
+        // window.onload = init; // microsoft 
+        // window.addEventListener("load", init); // mozilla 
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</head>
+<!-- <body onload="init()"> -->
+<body>
+    <h1>Welcome To Your Life</h1>
+    <!-- <script>
+        init();
+    </script> -->
+</body>
+</html>

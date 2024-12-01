@@ -1,0 +1,11 @@
+https://github.com/coreybutler/nvm-windows/releases/download/1.1.12/nvm-setup.exe
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+https://github.com/nodefiles
+
+https://github.com/nodefiles/node-nov
+
+https://nodejs.org/en
+
+
