@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read | Write to DB</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", init);
+        function init(){
+            document.getElementsByTagName("button")[0].addEventListener("click", clickHandler)
+        };
+        function clickHandler(){
+            // alert("button was clicked")
+        
+            fetch("/data", {method: "GET"})
+            .then((dbres)=>{
+                return dbres.json()
+            })
+            .then((jsondata)=>{
+                // console.log(jsondata);
+                // console.log(jsondata.length)
+                jsondata.forEach((val, idx)=>{
+                    document.getElementById("box").innerHTML+=`
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${val.title}</td>
+                        <td>${val.firstname}</td>
+                        <td>${val.lastname}</td>
+                        <td>${val.city}</td>
+                    </tr>
+                    `
+                })
+                
+            })
+            .catch((error)=>{
+                console.log("Error ", error);
+            })
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+    <h1>Friends list</h1>
+    <button class="btn btn-primary">Load data</button>
+    <hr>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Sl #</th>
+                <th>Title</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody id="box">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
