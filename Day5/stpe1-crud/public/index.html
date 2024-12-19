@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Read | Write to DB</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        .card{
+            padding: 20px;
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", init);
         function loaddata(){
@@ -40,6 +45,9 @@
             // document.getElementById("loadbtn").addEventListener("click", clickHandler)
             document.getElementById("addbtn").addEventListener("click", addFriendkHandler)
             document.getElementById("box").addEventListener("click", deleteHandler)
+            document.getElementById("box").addEventListener("click", editHandler)
+            document.getElementById("updatebtn").addEventListener("click", updateHandler)
+            document.getElementsByClassName("editbox")[0].setAttribute("style","display:none")
         };
         // function clickHandler(){
         //     // alert("button was clicked")
@@ -50,7 +58,7 @@
             if(evt.target.textContent === " Delete "){
             // alert("delete button was clicked"+"id is "+ evt.target.getAttribute("data-fid"));
             fetch("/delete", {
-                method : "delete",
+                method : "DELETE",
                 headers : {"Content-Type":"application/json"},
                 body : JSON.stringify({
                     id : evt.target.getAttribute("data-fid")
@@ -68,23 +76,44 @@
             })
             }
         }
+        function editHandler(evt){
+          if(evt.target.textContent === " Edit "){
+            // alert("edit button was clicked "+"id is "+ evt.target.getAttribute("data-fid"));
+            fetch("/edit/"+evt.target.getAttribute("data-fid"), {
+                method : "GET"
+            })
+            .then((res)=>{
+                document.getElementsByClassName("editbox")[0].setAttribute("style","display:static")
+                document.getElementsByClassName("addbox")[0].setAttribute("style","display:none")
+                return res.json();
+            })
+            .then((jsonres)=>{
+                // console.log(jsonres);
+                document.getElementById("e_titleip").value = jsonres.title;
+                document.getElementById("e_fname").value = jsonres.firstname;
+                document.getElementById("e_lname").value = jsonres.lastname;
+                document.getElementById("e_city").value = jsonres.city;
+                document.getElementById("e_id").value = jsonres._id;
+            })
+            .catch((erro)=>{console.log("Error, ", error)})
+            }
+        }
         function addFriendkHandler(){
             // alert("wiring correct")
             let title = document.getElementById("titleip").value;
             let firstname = document.getElementById("fname").value;
             let lastname = document.getElementById("lname").value;
             let city = document.getElementById("city").value;
-            if(title && firstname && lastname && city){
-                let data = JSON.stringify({
+            if(title && firstname && lastname && city){ 
+            fetch("/data", {
+                headers : {"Content-Type":"application/json"},
+                method : "POST",
+                body : JSON.stringify({
                     title : document.getElementById("titleip").value,
                     firstname : document.getElementById("fname").value,
                     lastname : document.getElementById("lname").value,
                     city : document.getElementById("city").value
-                });
-            fetch("/data", {
-                headers : {"Content-Type":"application/json"},
-                method : "POST",
-                body : data
+                }),
             })
             .then((dbres) => dbres)
             .then((dbres)=>{
@@ -97,8 +126,32 @@
             }else{
                 alert("Please fill all the details");
             }
-            
         };
+
+        function updateHandler(){
+            fetch("/edit/"+document.getElementById("e_id").value, {
+                headers : {"Content-Type":"application/json"},
+                method : "POST",
+                body : JSON.stringify({
+                    "title" : document.getElementById("e_titleip").value,
+                    "firstname" : document.getElementById("e_fname").value,
+                    "lastname" : document.getElementById("e_lname").value,
+                    "city" : document.getElementById("e_city").value,
+                }),
+            })
+            .then((dbres) => {
+                document.getElementsByClassName("addbox")[0].setAttribute("style","display:static")
+                document.getElementsByClassName("editbox")[0].setAttribute("style","display:none")
+                return dbres
+            })
+            .then((dbres)=>{
+                console.log("DB Response:", dbres)
+                loaddata();
+            })
+            .catch((error)=>{
+                console.log("Error ", error);
+            })
+        }
     </script>
 </head>
 <body>
@@ -106,24 +159,47 @@
     <h1>Friends list</h1>
     <!-- <button id="loadbtn" class="btn btn-primary">Load data</button> -->
     <hr>
-        <div class="mb-3">
-          <label for="title" class="form-label">Friend's title</label>
-          <input  class="form-control" id="titleip">
+        <div class="addbox card">
+            <h3>Add Friend data</h3>
+            <div class="mb-3">
+                <label for="title" class="form-label">Friend's title</label>
+                <input  class="form-control" id="titleip">
+              </div>
+              <div class="mb-3">
+                <label for="firstname" class="form-label">Friend's first name</label>
+                <input  class="form-control" id="fname">
+              </div>
+              <div class="mb-3">
+                <label for="lastname" class="form-label">Friend's last name</label>
+                <input  class="form-control" id="lname">
+              </div>
+              <div class="mb-3">
+                <label for="city" class="form-label">Friend's city</label>
+                <input  class="form-control" id="city">
+              </div>
+              <button id="addbtn" type="submit" class="btn btn-primary">Add Friend info</button>
         </div>
-        <div class="mb-3">
-          <label for="firstname" class="form-label">Friend's first name</label>
-          <input  class="form-control" id="fname">
+        <div class="editbox card">
+            <h3>Update Friend's data</h3>
+            <div class="mb-3">
+                <label for="e_title" class="form-label">Edit Friend's title</label>
+                <input  class="form-control" id="e_titleip">
+              </div>
+              <div class="mb-3">
+                <label for="e_firstname" class="form-label">Edit Friend's first name</label>
+                <input class="form-control" id="e_fname">
+              </div>
+              <div class="mb-3">
+                <label for="e_lastname" class="form-label">Edit Friend's last name</label>
+                <input  class="form-control" id="e_lname">
+              </div>
+              <div class="mb-3">
+                <label for="e_city" class="form-label">Edit Friend's city</label>
+                <input class="form-control" id="e_city">
+                <input type="hidden" id="e_id">
+              </div>
+              <button id="updatebtn" type="submit" class="btn btn-primary">Update Friend info</button>
         </div>
-        <div class="mb-3">
-          <label for="lastname" class="form-label">Friend's last name</label>
-          <input  class="form-control" id="lname">
-        </div>
-        <div class="mb-3">
-          <label for="city" class="form-label">Friend's city</label>
-          <input  class="form-control" id="city">
-        </div>
-       
-        <button id="addbtn" type="submit" class="btn btn-primary">Add Friend info</button>
         <br>
         <br>
     <table class="table table-striped">

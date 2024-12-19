@@ -61,8 +61,31 @@ app.get("/data", (req, res)=>{
     .catch(error => console.log("Error ", error))
 })
 
-//DELETE
+//READ BEFORE UPDATE
+app.get("/edit/:fid", (req, res)=>{
+    // console.log(req.params.fid);
+    Friend.findById({_id:req.params.fid})
+    .then((dbres) => {res.send(dbres)})
+    .catch((error) => {console.log("Error ", error)})
+})
 
+//UPDATE
+app.post("/edit/:fid", (req, res)=>{
+   Friend.findByIdAndUpdate({_id:req.params.fid},{
+    title : req.body.title,
+    firstname : req.body.firstname,
+    lastname : req.body.lastname,
+    city : req.body.city,
+   })
+   .then((dbres)=>{
+        res.send({message : "data was updated."})
+    })
+    .catch(error =>  {
+        console.log("Error", error)
+    })
+})
+
+//DELETE
 app.delete("/delete", (req, res)=>{
 //    console.log("Delete request for ", req.body._id)
     Friend.findByIdAndDelete({_id:req.body.id})
