@@ -43,7 +43,7 @@ app.get("/", (req, res)=>{
     res.sendFile(__dirname+"/public/index.html");
     // res.render("index.pug", {data : []})
 })
-
+//CREATE
 app.post("/data", (req, res)=>{
     console.log("req", req.body);
     var friend = new Friend(req.body)
@@ -54,13 +54,25 @@ app.post("/data", (req, res)=>{
     .catch(error => console.log("Error ", error))
 })
 
+//READ
 app.get("/data", (req, res)=>{
     Friend.find()
     .then(dbres => res.send(dbres))
     .catch(error => console.log("Error ", error))
 })
 
+//DELETE
 
+app.delete("/delete", (req, res)=>{
+//    console.log("Delete request for ", req.body._id)
+    Friend.findByIdAndDelete({_id:req.body.id})
+    .then((dbres)=>{
+        res.send({message : "Friend delete "+dbres.title})
+    })
+    .catch((error)=>{ 
+        console.log("Error ", error);
+    })
+})
 
 
 app.listen(config.port, config.host, (error)=>{

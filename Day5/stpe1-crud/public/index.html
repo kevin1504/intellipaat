@@ -15,6 +15,7 @@
             .then((jsondata)=>{
                 // console.log(jsondata);
                 // console.log(jsondata.length)
+                document.getElementById("box").innerHTML = "";
                 jsondata.forEach((val, idx)=>{
                     document.getElementById("box").innerHTML+=`
                     <tr>
@@ -23,8 +24,8 @@
                         <td>${val.firstname}</td>
                         <td>${val.lastname}</td>
                         <td>${val.city}</td>
-                        <td> <button class="btn btn-warning"> Edit </button> </td>
-                        <td> <button class="btn btn-danger"> Delete </button> </td>
+                        <td> <button data-fid="${val._id}" class="btn btn-warning"> Edit </button> </td>
+                        <td> <button data-fid="${val._id}" class="btn btn-danger"> Delete </button> </td>
                     </tr>
                     `
                 })
@@ -35,13 +36,38 @@
             })
         }
         function init(){
-            document.getElementsByTagName("button")[0].addEventListener("click", clickHandler)
-            document.getElementsByTagName("button")[1].addEventListener("click", addFriendkHandler)
+            loaddata();
+            // document.getElementById("loadbtn").addEventListener("click", clickHandler)
+            document.getElementById("addbtn").addEventListener("click", addFriendkHandler)
+            document.getElementById("box").addEventListener("click", deleteHandler)
         };
-        function clickHandler(){
-            // alert("button was clicked")
-        loaddata();            
-        };
+        // function clickHandler(){
+        //     // alert("button was clicked")
+        // loaddata();            
+        // };
+        function deleteHandler(evt){
+            // if(evt.target.getAttribute("class")===("btn btn-danger")){
+            if(evt.target.textContent === " Delete "){
+            // alert("delete button was clicked"+"id is "+ evt.target.getAttribute("data-fid"));
+            fetch("/delete", {
+                method : "delete",
+                headers : {"Content-Type":"application/json"},
+                body : JSON.stringify({
+                    id : evt.target.getAttribute("data-fid")
+                })
+            })
+            .then((res)=>{
+                loaddata();
+                return res.json();
+            })
+            .then((jsonres)=>{
+                console.log(jsonres)
+            })
+            .catch(()=>{
+                console.log("Error ", error)
+            })
+            }
+        }
         function addFriendkHandler(){
             // alert("wiring correct")
             let title = document.getElementById("titleip").value;
@@ -78,7 +104,7 @@
 <body>
     <div class="container">
     <h1>Friends list</h1>
-    <button class="btn btn-primary">Load data</button>
+    <!-- <button id="loadbtn" class="btn btn-primary">Load data</button> -->
     <hr>
         <div class="mb-3">
           <label for="title" class="form-label">Friend's title</label>
@@ -97,7 +123,7 @@
           <input  class="form-control" id="city">
         </div>
        
-        <button type="submit" class="btn btn-primary">Add Friend info</button>
+        <button id="addbtn" type="submit" class="btn btn-primary">Add Friend info</button>
         <br>
         <br>
     <table class="table table-striped">
