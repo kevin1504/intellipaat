@@ -1,9 +1,10 @@
 const express = require("express");
-const config = require("./config.json")
-const mongoose = require("mongoose")
+const config = require("./config.json");
+const mongoose = require("mongoose");
 
 const app = express();
 app.use(express.static(__dirname));
+app.use(express.json());
 let localurl = "";
 let rawurl = "mongodb+srv://{{dbuser}}:{{dbpass}}@cluster0.{{dbstring}}.mongodb.net/{{dbname}}?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -23,7 +24,11 @@ let ObjectId = mongoose.ObjectId;
 
 let Friend = mongoose.model("Friend", new Schema({
     id : ObjectId,
-    title : String,
+    title : {
+        type: String,
+        required: true,
+        unique: true
+    },
     firstname : String,
     lastname : String,
     city : String,
@@ -37,6 +42,16 @@ let Friend = mongoose.model("Friend", new Schema({
 app.get("/", (req, res)=>{
     res.sendFile(__dirname+"/public/index.html");
     // res.render("index.pug", {data : []})
+})
+
+app.post("/data", (req, res)=>{
+    console.log("req", req.body);
+    var friend = new Friend(req.body)
+    .save()
+    .then((dbres)=>{
+        res.send({message : "data was added."})
+    })
+    .catch(error => console.log("Error ", error))
 })
 
 app.get("/data", (req, res)=>{

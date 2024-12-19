@@ -7,12 +7,7 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script>
         document.addEventListener("DOMContentLoaded", init);
-        function init(){
-            document.getElementsByTagName("button")[0].addEventListener("click", clickHandler)
-        };
-        function clickHandler(){
-            // alert("button was clicked")
-        
+        function loaddata(){
             fetch("/data", {method: "GET"})
             .then((dbres)=>{
                 return dbres.json()
@@ -28,6 +23,8 @@
                         <td>${val.firstname}</td>
                         <td>${val.lastname}</td>
                         <td>${val.city}</td>
+                        <td> <button class="btn btn-warning"> Edit </button> </td>
+                        <td> <button class="btn btn-danger"> Delete </button> </td>
                     </tr>
                     `
                 })
@@ -37,6 +34,45 @@
                 console.log("Error ", error);
             })
         }
+        function init(){
+            document.getElementsByTagName("button")[0].addEventListener("click", clickHandler)
+            document.getElementsByTagName("button")[1].addEventListener("click", addFriendkHandler)
+        };
+        function clickHandler(){
+            // alert("button was clicked")
+        loaddata();            
+        };
+        function addFriendkHandler(){
+            // alert("wiring correct")
+            let title = document.getElementById("titleip").value;
+            let firstname = document.getElementById("fname").value;
+            let lastname = document.getElementById("lname").value;
+            let city = document.getElementById("city").value;
+            if(title && firstname && lastname && city){
+                let data = JSON.stringify({
+                    title : document.getElementById("titleip").value,
+                    firstname : document.getElementById("fname").value,
+                    lastname : document.getElementById("lname").value,
+                    city : document.getElementById("city").value
+                });
+            fetch("/data", {
+                headers : {"Content-Type":"application/json"},
+                method : "POST",
+                body : data
+            })
+            .then((dbres) => dbres)
+            .then((dbres)=>{
+                console.log("DB Response:", dbres)
+                loaddata();
+            })
+            .catch((error)=>{
+                console.log("Error ", error);
+            })
+            }else{
+                alert("Please fill all the details");
+            }
+            
+        };
     </script>
 </head>
 <body>
@@ -44,6 +80,26 @@
     <h1>Friends list</h1>
     <button class="btn btn-primary">Load data</button>
     <hr>
+        <div class="mb-3">
+          <label for="title" class="form-label">Friend's title</label>
+          <input  class="form-control" id="titleip">
+        </div>
+        <div class="mb-3">
+          <label for="firstname" class="form-label">Friend's first name</label>
+          <input  class="form-control" id="fname">
+        </div>
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Friend's last name</label>
+          <input  class="form-control" id="lname">
+        </div>
+        <div class="mb-3">
+          <label for="city" class="form-label">Friend's city</label>
+          <input  class="form-control" id="city">
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Add Friend info</button>
+        <br>
+        <br>
     <table class="table table-striped">
         <thead class="table-dark">
             <tr>
@@ -52,6 +108,8 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>City</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="box">
