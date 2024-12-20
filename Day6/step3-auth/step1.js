@@ -14,6 +14,9 @@ app.get("/register", function (req, res) {
 app.get("/profile", function (req, res) {
     res.render("profile.pug")
 })
+app.get("/logout", function (req, res) {
+    res.redirect("/")
+})
 
 
 
