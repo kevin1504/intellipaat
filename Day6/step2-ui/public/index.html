@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read | Write to DB</title>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <style>
+        .card {
+            padding: 20px;
+        }
+    </style>
+    <script src="myscripts/script.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Friends List</h1>
+        <!-- <button id="loadbtn" class="btn btn-primary">Load Data</button> -->
+        <hr>
+        <div class="addbox card">
+            <h3>Add Friend Data</h3>
+            <div class="mb-3">
+                <label for="titleip" class="form-label">Friend's Title</label>
+                <input class="form-control" id="titleip">
+            </div>
+            <div class="mb-3">
+                <label for="fname" class="form-label">Friend's First Name</label>
+                <input class="form-control" id="fname">
+            </div>
+            <div class="mb-3">
+                <label for="lname" class="form-label">Friend's Last Name</label>
+                <input class="form-control" id="lname">
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">Friend's City</label>
+                <input class="form-control" id="city">
+            </div>
+            <button id="addbtn" type="submit" class="btn btn-primary">Add Friend Info</button>
+        </div>
+        <div class="editbox card">
+            <h3>Update Friend's Data</h3>
+            <div class="mb-3">
+                <label for="e_titleip" class="form-label">Edit Friend's Title</label>
+                <input class="form-control" id="e_titleip">
+            </div>
+            <div class="mb-3">
+                <label for="e_fname" class="form-label">Edit Friend's First Name</label>
+                <input class="form-control" id="e_fname">
+            </div>
+            <div class="mb-3">
+                <label for="e_lname" class="form-label">Edit Friend's Last Name</label>
+                <input class="form-control" id="e_lname">
+            </div>
+            <div class="mb-3">
+                <label for="e_city" class="form-label">Edit Friend's City</label>
+                <input class="form-control" id="e_city">
+                <input type="hidden" id="e_id">
+            </div>
+            <button id="updatebtn" type="submit" class="btn btn-primary">Update Friend Info</button>
+        </div>
+        <br>
+        <br>
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Sl #</th>
+                    <th>Title</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>City</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="box"></tbody>
+        </table>
+
+    </div>
+</body>
+
+</html>
