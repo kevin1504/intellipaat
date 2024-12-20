@@ -1,0 +1,13 @@
+extends template 
+
+block vars 
+    - var title = "Home Page"
+    - var company = "Intellipaat"
+
+block body 
+    h1 #{title}
+    h2 #{company}'s application
+    br
+    a(href="/login") Login Page
+    br
+    a(href="/Register") New User Register here
