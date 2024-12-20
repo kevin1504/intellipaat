@@ -1,7 +1,7 @@
 {
   "name": "step3-auth",
   "version": "1.0.0",
-  "main": "step2.js",
+  "main": "step3.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
