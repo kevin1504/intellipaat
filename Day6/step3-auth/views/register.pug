@@ -7,7 +7,9 @@ block vars
 block body 
     h1 #{title}
     h2 #{company}'s application
-    p(class="text-danger") #{errorMessage}
+    if errorMessage
+        p(class="text-danger") #{errorMessage}
+        
     form(method="post") 
         div(class="mb-3") 
             label(for="firstname" class="form-label") First Name
