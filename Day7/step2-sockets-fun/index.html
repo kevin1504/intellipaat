@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="node_modules//socket.io/client-dist/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let messageHandler = function (evt) {
+            console.log(evt.message)
+        }
+        //send message
+        //receive message
+        //open
+        //close
+        function clickHandler() {
+            let ipvalue = document.getElementById("ip").value;
+            socket.emit("clientmessage", ipvalue);
+        };
+        function closeHandler() {
+            socket.close();
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            socket.addEventListener("message", messageHandler);
+            document.getElementById("btn").addEventListener("click", clickHandler);
+            document.getElementById("closebtn").addEventListener("click", closeHandler);
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Hello From Socket.io</h1>
+    <input id="ip" type="text">
+    <button id="btn">Send chat message</button>
+    <button id="closebtn">close socket</button>
+</body>
+
+</html>
