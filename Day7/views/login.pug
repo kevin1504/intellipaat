@@ -1,0 +1,21 @@
+extends template 
+
+block vars 
+    - var title = "Login Page"
+    - var company = "Intellipaat"
+
+block body 
+    h1 #{title}
+    h2 #{company}'s application
+    if errorMessage
+        p(class="text-danger") #{errorMessage}
+        
+    form(method="post")
+        div(class="mb-3") 
+            label(for="email" class="form-label") Registered Email
+            input(type="email" name="email" required class="form-control" id="email" placeholder="Your email") 
+        div(class="mb-3") 
+            label(for="password" class="form-label") Password
+            input(type="password" name="password" required class="form-control" id="password") 
+        div(class="mb-3") 
+            input(type="submit" class="btn btn-primary" value="Login") 
