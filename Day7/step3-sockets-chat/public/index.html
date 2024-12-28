@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 600px;
+            height: 400px;
+            overflow: auto;
+        }
+    </style>
+    <script src="node_modules//socket.io/client-dist/socket.io.js"></script>
+    <script>
+        let ip;
+        let socket = io();
+        let username = "";
+        document.addEventListener("DOMContentLoaded", function () {
+
+            ip = document.getElementById("chatmessage");
+
+            document.getElementById("loginbutton").addEventListener("click", function () {
+                username = document.getElementById("uname").value;
+                document.getElementsByClassName("loginbox")[0].setAttribute("style", "display:none");
+                document.getElementsByClassName("box")[0].setAttribute("style", "display:block");
+            });
+
+            socket.on("serverMessage", function (data) {
+                document.getElementsByClassName("container")[0].innerHTML += "<p style='color : red'>" + data.username + " says : " + data.message + "</p>";
+            });
+            socket.on("connect", function (data) {
+                document.getElementById("log").innerHTML = "connected";
+            });
+            socket.on("disconnect", function (data) {
+                document.getElementById("log").innerHTML = "disconnected";
+            });
+
+            document.getElementById("chatbutton").addEventListener("click", function () {
+                socket.emit("clientMessage", { "username": username, "message": ip.value });
+                ip.value = "";
+            })
+            document.getElementById("disconBtn").addEventListener("click", function () {
+                //socket.emit("disconnect");
+                document.getElementsByClassName("loginbox")[0].setAttribute("style", "display:block");
+                document.getElementsByClassName("box")[0].setAttribute("style", "display:none");
+            })
+
+        })
+
+    </script>
+</head>
+
+<body>
+    <h1>Chat server is now <span id="log"></span></h1>
+    <div class="loginbox">
+        <input id="uname" type="text">
+        <button id="loginbutton">Login</button>
+    </div>
+    <div class="box" style="display: none;">
+        <input id="chatmessage" type="text">
+        <button id="chatbutton">send</button>
+        <div class="container"></div>
+        <br>
+        <br>
+        <button id="disconBtn">Disconnect</button>
+    </div>
+</body>
+
+</html>
